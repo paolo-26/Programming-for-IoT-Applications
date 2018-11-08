@@ -1,1 +1,2 @@
-# Programming-for-IoT-Applications
+# Programming for IoT Applications
+Laboratory activities.

@@ -1,10 +1,10 @@
 """
 @author = Paolo Grasso
 Examples
-0.0.0.0:8080/add?op1=5&op2=9.5
-0.0.0.0:8080/mul?op1=5&op2=9.5
-0.0.0.0:8080/sub?op1=5&op2=9.5
-0.0.0.0:8080/div?op1=5&op2=9.5
+0.0.0.0:8080/add/2/9.5
+0.0.0.0:8080/mul/3/21
+0.0.0.0:8080/sub/7/4.7
+0.0.0.0:8080/div/10/4.2
 """
 import json
 import random

@@ -13,12 +13,12 @@ import cherrypy
 
 
 class Calculator():
-    
+
     def __init__(self):
         pass
-                
+
     def add(self, op1, op2):
-        return op1 + op2 
+        return op1 + op2
 
     def sub(self, op1, op2):
         return op1 - op2
@@ -37,7 +37,7 @@ class Calculator():
         return json.dumps(dict)
 
 
-class add(Calculator):
+class Add(Calculator):
     exposed = True
     def GET (self, *uri, **params):
         ad = Calculator()
@@ -45,7 +45,7 @@ class add(Calculator):
         json = ad.printjson('add', uri[0], uri[1], res)
         return json
 
-class sub(Calculator):
+class Sub(Calculator):
     exposed = True
     def GET (self, *uri, **params):
         ad = Calculator()
@@ -53,7 +53,7 @@ class sub(Calculator):
         json = ad.printjson('sub', uri[0], uri[1], res)
         return json
 
-class mul(Calculator):
+class Mul(Calculator):
     exposed = True
     def GET (self, *uri, **params):
         ad = Calculator()
@@ -61,7 +61,7 @@ class mul(Calculator):
         json = ad.printjson('mul', uri[0], uri[1], res)
         return json
 
-class div(Calculator):
+class Div(Calculator):
     exposed = True
     def GET (self, *uri, **params):
         ad = Calculator()
@@ -78,10 +78,10 @@ if __name__ == '__main__':
         }
     }
 
-    cherrypy.tree.mount (add(), '/add', conf)
-    cherrypy.tree.mount (sub(), '/sub', conf)
-    cherrypy.tree.mount (mul(), '/mul', conf)
-    cherrypy.tree.mount (div(), '/div', conf)
+    cherrypy.tree.mount (Add(), '/add', conf)
+    cherrypy.tree.mount (Sub(), '/sub', conf)
+    cherrypy.tree.mount (Mul(), '/mul', conf)
+    cherrypy.tree.mount (Div(), '/div', conf)
     cherrypy.config.update({'server.socket_host': '0.0.0.0'})
     cherrypy.config.update({'server.socket_port': 8080})
     cherrypy.engine.start()

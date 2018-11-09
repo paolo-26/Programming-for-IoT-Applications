@@ -5,7 +5,7 @@ import string
 class HelloWorld(object):
 	@cherrypy.expose
 	def index(self):
-		return "Error 404: Not found"
+		return "Cherry cherry cherry"
 
 	@cherrypy.expose
 	def generate(self):

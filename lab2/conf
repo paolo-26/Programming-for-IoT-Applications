@@ -3,7 +3,6 @@ request.dispatch = cherrypy.dispatch.MethodDispatcher()
 tools.sessions.on = True
 tools.staticdir.root = "/home/paolo26/Programming-for-IoT-Applications/lab2/freeboard"
 
-
 [/css]
 tools.staticdir.on = True
 tools.staticdir.dir = "css"

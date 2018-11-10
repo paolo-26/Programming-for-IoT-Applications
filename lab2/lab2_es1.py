@@ -7,15 +7,10 @@ Examples
 0.0.0.0:8080/div?op1=5&op2=9.5
 """
 import json
-import random
-import string
 import cherrypy
 
 
 class Calculator():
-
-    def __init__(self):
-        pass
 
     def add(self, op1, op2):
         return op1 + op2

@@ -5,7 +5,7 @@ How to use:
     Send a PUT request with Postman with:
 
         destination = 0.0.0.0:8080/operation
-        body (raw) = {"command": "add","operands": [10, 9, 8, 7, 6, 5, 3, 2, 1]}
+        body (raw) = {"command": "add","operands": [10, 9, 8, 5, 3, 2, 1]}
 
 Valid commands:
     add, mul, val, div
@@ -62,7 +62,9 @@ class Calculator():
 
     def printjson(self, operator, operands, result):
         self.operands = [int(i) for i in operands]
-        self.data = {'operands':self.operands, 'operator':operator, 'result':result}
+        self.data = {'operands':self.operands,
+            'operator':operator,
+            'result':result}
         return json.dumps(self.data)
 
 

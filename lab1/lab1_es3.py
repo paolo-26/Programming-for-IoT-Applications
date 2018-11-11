@@ -22,12 +22,13 @@ class Discography():
     def run(self):
 
         while True:
-            inp = input("\nWhat do you want to do?\n - search\n - insert\n - print_all\n - exit\n-> ")
+            inp = input('\nWhat do you want to do?\n - search\n'
+            ' - insert\n - print_all\n - exit\n-> ')
             inp = inp.split()
 
             if inp[0] not in self.options:
                 print("Invalid command")
-            
+
             if inp[0] == 'exit' or inp == 'quit':
                 if self.changed:
                     self.saveData()
@@ -45,7 +46,8 @@ class Discography():
                 else:
 
                     while True:
-                        up=input("Do you want to update data about %s? (y/n)\n-> " % inp[2])
+                        up=input("Do you want to update data about %s? "
+                        "(y/n)\n-> " % inp[2])
 
                         if up == 'y' or up == 'Y':
                             self.updateData(inp[1], inp[2], inp[3], inp[4])
@@ -53,7 +55,7 @@ class Discography():
 
                         elif up == 'n' or up == 'N':
                             break
-                            
+
 
             if inp[0] == 'search':
                 #print(inp[1])
@@ -79,7 +81,8 @@ class Discography():
 
             for d in self.data['album_list']:
 
-                if d['publication_year']==self.arg or d['total_tracks']==self.arg:
+                if (d['publication_year'] == self.arg or
+                    d['total_tracks'] == self.arg):
                     #print(self.data['album_list'][k])
                     print(json.dumps(self.data['album_list'][k], indent=4))
 
@@ -108,11 +111,12 @@ class Discography():
         for d in self.data['album_list']:
 
             if d['title'] == self.disk:
-                print("Disk %s is already present in the discography" %self.disk)
+                print("Disk %s is already present in the discography"
+                    %self.disk)
                 self.list_n = k
                 return 1
 
-            k += 1  
+            k += 1
 
         return 0
 
@@ -124,7 +128,9 @@ class Discography():
             self.publication_year = int(year)
             self.total_tracks = int(tracks)
             print("Updating data...")
-            self.data['album_list'][self.list_n].update({"artist": self.artist, "title": self.title, "publication_year": self.publication_year, "total_tracks": self.total_tracks})
+            self.data['album_list'][self.list_n].update({"artist": self.artist,
+                "title": self.title, "publication_year": self.publication_year,
+                "total_tracks": self.total_tracks})
             self.changed = 1
             self.updateTime()
 
@@ -132,7 +138,7 @@ class Discography():
             print("Invalid format for year or number of tracks")
 
     def insertData(self, artist, title, year, tracks):
-        
+
         self.artist = artist
         self.title = title
 
@@ -140,7 +146,9 @@ class Discography():
             self.publication_year = int(year)
             self.total_tracks = int(tracks)
             print("Adding data...")
-            self.data['album_list'].append({"artist": self.artist, "title": self.title, "publication_year": self.publication_year, "total_tracks": self.total_tracks})
+            self.data['album_list'].append({"artist": self.artist,
+                "title": self.title, "publication_year": self.publication_year,
+                "total_tracks": self.total_tracks})
             self.changed = 1
             self.updateTime()
 
@@ -148,7 +156,8 @@ class Discography():
             print("Invalid format for year or number of tracks")
 
     def updateTime(self):
-        self.data.update({"last_update": datetime.datetime.now().strftime("%Y-%m-%d %H:%M")})
+        self.data.update({"last_update":
+            datetime.datetime.now().strftime("%Y-%m-%d %H:%M")})
 
 
 if __name__ == '__main__':

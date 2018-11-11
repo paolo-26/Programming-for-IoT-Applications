@@ -33,7 +33,9 @@ class Calculator():
             return op1 / op2
 
     def printjson(self, operator, operand1, operand2, result):
-        dict = {'operator':operator, 'operand1':operand1, 'operand2':operand2, 'result':result}
+        dict = {'operator':operator, 'operand1':operand1,
+            'operand2':operand2,
+            'result':result}
         return json.dumps(dict)
 
 

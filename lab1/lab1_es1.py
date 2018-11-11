@@ -9,7 +9,7 @@ def callMethod(str):
 
 
 class Calculator():
-    
+
     def __init__(self):
         self.exitflag=0
 
@@ -41,9 +41,9 @@ class Calculator():
 
             except:
                 print("Command not found")
-                
+
     def add(self):
-        return self.num1 + self.num2 
+        return self.num1 + self.num2
 
     def sub(self):
         return self.num1 - self.num2
@@ -62,7 +62,9 @@ class Calculator():
         self.exitflag=1
 
     def printjson(self, operator, operand1, operand2, result):
-        dict = {'operator':operator, 'operand1':operand1, 'operand2':operand2, 'result':result}
+        dict = {'operator':operator, 'operand1':operand1,
+            'operand2':operand2,
+            'result':result}
         print(json.dumps(dict))
         pass
 

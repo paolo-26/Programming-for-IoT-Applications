@@ -63,7 +63,7 @@ class Calculator():
         for i in range(len(self.vect)):
             res -= int(self.vect[i])
 
-        return res      
+        return res
 
     def mul(self, vect):
         self.vect = vect
@@ -98,8 +98,10 @@ class Calculator():
 
     def printjson(self, operator, operands, result, filename):
         self.operands = [int(i) for i in operands]
-        
-        self.data['operations'].append({'operator':operator, 'operands':self.operands, 'result':result})
+
+        self.data['operations'].append({'operator':operator,
+            'operands':self.operands,
+            'result':result})
         #print(json.dumps(dict))
 
         with open(filename, 'w') as outfile:

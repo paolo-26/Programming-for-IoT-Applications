@@ -1,24 +1,28 @@
+[global]
+server.socket_host: '0.0.0.0'
+server.socket_port: 9090
+
 [/]
-request.dispatch = cherrypy.dispatch.MethodDispatcher()
-tools.sessions.on = True
-tools.staticdir.root = "/home/paolo26/Programming-for-IoT-Applications/lab2/freeboard"
+request.dispatch: cherrypy.dispatch.MethodDispatcher()
+tools.staticdir.root: '/home/paolo26/Programming-for-IoT-Applications/lab2/freeboard'
 
 [/css]
-tools.staticdir.on = True
-tools.staticdir.dir = "css"
+request.dispatch: cherrypy.dispatch.MethodDispatcher()
+tools.staticdir.on: True
+tools.staticdir.dir: 'css'
 
 [/dashboard]
-tools.staticdir.on = True
-tools.staticdir.dir = "dashboard"
+tools.staticdir.on: True
+tools.staticdir.dir: 'dashboard'
 
 [/img]
-tools.staticdir.on = True
-tools.staticdir.dir = "img"
+tools.staticdir.on: True
+tools.staticdir.dir: 'img'
 
 [/js]
 tools.staticdir.on = True
-tools.staticdir.dir = "js"
+tools.staticdir.dir:'js'
 
 [/plugins]
-tools.staticdir.on = True
-tools.staticdir.dir = "plugins"
+tools.staticdir.on: True
+tools.staticdir.dir: 'plugins'

@@ -10,9 +10,7 @@ class Index(object):
         return open("./freeboard/index.html", "r").read()
 
 if __name__ == '__main__':
-
-    cherrypy.tree.mount (Index(), '/index', 'conf')
-    cherrypy.config.update({'server.socket_host': '0.0.0.0'})
-    cherrypy.config.update({'server.socket_port': 8080})
+    cherrypy.tree.mount (Index(), '/', config='conf')
+    cherrypy.config.update('conf')
     cherrypy.engine.start()
     cherrypy.engine.block()

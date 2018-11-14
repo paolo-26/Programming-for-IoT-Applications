@@ -74,25 +74,25 @@ class Operation(Calculator):
 
     def PUT (self, *uri, **params):
         body = json.loads(cherrypy.request.body.read())  # Read body data
-        myCalc = Calculator()
+        my_calc = Calculator()
 
         if body["command"] == "add":
-            res = myCalc.add(body["operands"])
-            myJson = myCalc.printjson('add', body["operands"], res)
+            res = my_calc.add(body["operands"])
+            my_json = my_calc.printjson('add', body["operands"], res)
 
         if body["command"] == "sub":
-            res = myCalc.sub(body["operands"])
-            myJson = myCalc.printjson('sub', body["operands"], res)
+            res = my_calc.sub(body["operands"])
+            my_json = my_calc.printjson('sub', body["operands"], res)
 
         if body["command"] == "mul":
-            res = myCalc.mul(body["operands"])
-            myJson = myCalc.printjson('mul', body["operands"], res)
+            res = my_calc.mul(body["operands"])
+            my_json = my_calc.printjson('mul', body["operands"], res)
 
         if body["command"] == "div":
-            res = myCalc.div(body["operands"])
-            myJson = myCalc.printjson('div', body["operands"], res)
+            res = my_calc.div(body["operands"])
+            my_json = my_calc.printjson('div', body["operands"], res)
 
-        return myJson
+        return my_json
 
 
 if __name__ == '__main__':

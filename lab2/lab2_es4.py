@@ -3,7 +3,7 @@
 @author = Paolo Grasso
 
 - Set 'freeboard' folder path in the conf file
-- Visit 0.0.0.0/8080
+- Visit '0.0.0.0:8080'
 - Edit freeboard configuration
 - Save the configuration
 - Reload the page

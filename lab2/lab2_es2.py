@@ -45,32 +45,32 @@ class Add(Calculator):
     def GET (self, *uri, **params):
         ad = Calculator()
         res = ad.add(float(uri[0]), float(uri[1]))
-        myJson = ad.printjson('add', uri[0], uri[1], res)
-        return myJson
+        my_json = ad.printjson('add', uri[0], uri[1], res)
+        return my_json
 
 class Sub(Calculator):
     exposed = True
     def GET (self, *uri, **params):
         ad = Calculator()
         res = ad.sub(float(uri[0]), float(uri[1]))
-        myJson = ad.printjson('sub', uri[0], uri[1], res)
-        return myJson
+        my_json = ad.printjson('sub', uri[0], uri[1], res)
+        return my_json
 
 class Mul(Calculator):
     exposed = True
     def GET (self, *uri, **params):
         ad = Calculator()
         res = ad.mul(float(uri[0]), float(uri[1]))
-        myJson = ad.printjson('mul', uri[0], uri[1], res)
-        return myJson
+        my_json = ad.printjson('mul', uri[0], uri[1], res)
+        return my_json
 
 class Div(Calculator):
     exposed = True
     def GET (self, *uri, **params):
         ad = Calculator()
         res = ad.div(float(uri[0]), float(uri[1]))
-        myJson = ad.printjson('div', uri[0], uri[1], res)
-        return myJson
+        my_json = ad.printjson('div', uri[0], uri[1], res)
+        return my_json
 
 if __name__ == '__main__':
 

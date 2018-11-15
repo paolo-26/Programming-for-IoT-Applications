@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 """
 @author = Paolo Grasso
+Run 'calculator.py' in order to use this script.
 """
 import json
-import cherrypy
 import requests
 
 OP = ' - add\n - sub\n - mul\n - div'
 INP = '\n > '
 
+
 class Application(object):
 
     def __init__(self):
-        pass
+        self.run()
 
     def run(self):
+
         while True:
             inp = input('What do you want to do?\n'+OP+INP)
             inp = inp.split()
@@ -40,11 +42,9 @@ class Application(object):
         op1 = float(res_json['operand 1'])
         op2 = float(res_json['operand 2'])
         res = float(res_json['result'])
-
         print('\n  First operand: %.2f\n  Second operand: %.2f\n'
         '  Operator: %s\n  Result: %.2f\n' %(op1, op2, operator, res))
 
 
 if __name__ == '__main__':
     app = Application()
-    app.run()

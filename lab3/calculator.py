@@ -21,8 +21,10 @@ class Calculator(object):
         return self.op1 * self.op2
 
     def div(self):
+
         if (self.op2 == 0):
             return 'ERR div by 0'
+
         else:
             return self.op1 / self.op2
 
@@ -32,47 +34,54 @@ class Calculator(object):
             'result':result}
         return json.dumps(dict)
 
+
 class Add(Calculator):
     exposed = True
+
     def GET (self, *uri, **params):
         ad = Calculator(float(params['op1']), float(params['op2']))
         res = ad.add()
         json = ad.printjson('add', res)
         return json
 
+
 class Sub(Calculator):
     exposed = True
+
     def GET (self, *uri, **params):
         ad = Calculator(float(params['op1']), float(params['op2']))
         res = ad.sub()
         json = ad.printjson('sub', res)
         return json
 
+
 class Mul(Calculator):
     exposed = True
+
     def GET (self, *uri, **params):
         ad = Calculator(float(params['op1']), float(params['op2']))
         res = ad.mul()
         json = ad.printjson('mul', res)
         return json
 
+
 class Div(Calculator):
     exposed = True
+
     def GET (self, *uri, **params):
         ad = Calculator(float(params['op1']), float(params['op2']))
         res = ad.div()
         json = ad.printjson('div', res)
         return json
 
-if __name__ == '__main__':
 
+if __name__ == '__main__':
     conf = {
         '/': {
         'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
         'tools.sessions.on': True,
         }
     }
-
     cherrypy.tree.mount (Add(), '/add', conf)
     cherrypy.tree.mount (Sub(), '/sub', conf)
     cherrypy.tree.mount (Mul(), '/mul', conf)

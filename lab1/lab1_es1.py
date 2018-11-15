@@ -19,7 +19,7 @@ class Calculator():
 
         while True:
             x = input("What do you want to do?\n")
-            if (x == "exit"):
+            if (x == "exit") or (x == "quit"):
                 self.exit()
                 break
 
@@ -28,8 +28,8 @@ class Calculator():
                 if len(x) != 3:
                     raise Exepction()
 
-                self.num1=int(x[1])
-                self.num2=int(x[2])
+                self.num1=float(x[1])
+                self.num2=float(x[2])
 
                 if (x[0] not in self.f_list):
                     raise Exception()

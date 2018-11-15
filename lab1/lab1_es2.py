@@ -53,7 +53,7 @@ class Calculator():
         res = 0
 
         for i in range(len(self.vect)):
-            res += int(self.vect[i])
+            res += float(self.vect[i])
 
         return res
 
@@ -62,7 +62,7 @@ class Calculator():
         res = 0
 
         for i in range(len(self.vect)):
-            res -= int(self.vect[i])
+            res -= float(self.vect[i])
 
         return res
 
@@ -71,7 +71,7 @@ class Calculator():
         res = 1
 
         for i in range(len(self.vect)):
-            res *= int(self.vect[i])
+            res *= float(self.vect[i])
 
         return res
 
@@ -80,15 +80,15 @@ class Calculator():
 
         for i in range(1,len(self.vect)):
 
-            if int(self.vect[i]) == 0:
+            if float(self.vect[i]) == 0:
                 res="ERR DIV0"
                 return res
 
         self.vect = vect
-        res = int(self.vect[0])
+        res = float(self.vect[0])
 
         for i in range(1,len(self.vect)):
-            res /= int(self.vect[i])
+            res /= float(self.vect[i])
 
         return res
 
@@ -98,7 +98,7 @@ class Calculator():
         self.exitflag = 1
 
     def printjson(self, operator, operands, result, filename):
-        self.operands = [int(i) for i in operands]
+        self.operands = [float(i) for i in operands]
 
         self.data['operations'].append({'operator':operator,
             'operands':self.operands,

@@ -63,7 +63,6 @@ class Discography(object):
     def __init__(self, filename='discography.json'):
         self.filename = filename
         self.data = {}
-        self.changed = 0
 
         with open(self.filename, 'r') as infile:
             self.data = json.load(infile)
@@ -128,7 +127,6 @@ class Discography(object):
             self.data['album_list'][self.list_n].update({"artist": self.artist,
                 "title": self.title, "publication_year": self.publication_year,
                 "total_tracks": self.total_tracks})
-            self.changed = 1
             self.update_time()
 
         except:
@@ -145,7 +143,6 @@ class Discography(object):
             self.data['album_list'].append({"artist": self.artist,
                 "title": self.title, "publication_year": self.publication_year,
                 "total_tracks": self.total_tracks})
-            self.changed = 1
             self.update_time()
 
         except:

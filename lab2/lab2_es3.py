@@ -15,6 +15,41 @@ import json
 import cherrypy
 
 
+class WebServer():
+    exposed = True
+
+    def GET(self):
+        pass
+
+    def POST(self):
+        pass
+
+    def PUT (self, *uri, **params):
+        body = json.loads(cherrypy.request.body.read())  # Read body data
+        my_calc = Calculator()
+
+        if body["command"] == "add":
+            res = my_calc.add(body["operands"])
+            my_json = my_calc.printjson('add', body["operands"], res)
+
+        if body["command"] == "sub":
+            res = my_calc.sub(body["operands"])
+            my_json = my_calc.printjson('sub', body["operands"], res)
+
+        if body["command"] == "mul":
+            res = my_calc.mul(body["operands"])
+            my_json = my_calc.printjson('mul', body["operands"], res)
+
+        if body["command"] == "div":
+            res = my_calc.div(body["operands"])
+            my_json = my_calc.printjson('div', body["operands"], res)
+
+        return my_json
+
+    def DELETE(self):
+        pass
+
+
 class Calculator():
 
     def add(self, vect):
@@ -28,10 +63,10 @@ class Calculator():
 
     def sub(self, vect):
         self.vect = vect
-        res = 0
+        res = self.vect[0]
 
-        for i in range(len(self.vect)):
-            res -= int(self.vect[i])
+        for i in range(1,len(self.vect)):
+            res = res - int(self.vect[i])
 
         return res
 
@@ -69,32 +104,6 @@ class Calculator():
         return json.dumps(self.data)
 
 
-class Operation(Calculator):
-    exposed = True
-
-    def PUT (self, *uri, **params):
-        body = json.loads(cherrypy.request.body.read())  # Read body data
-        my_calc = Calculator()
-
-        if body["command"] == "add":
-            res = my_calc.add(body["operands"])
-            my_json = my_calc.printjson('add', body["operands"], res)
-
-        if body["command"] == "sub":
-            res = my_calc.sub(body["operands"])
-            my_json = my_calc.printjson('sub', body["operands"], res)
-
-        if body["command"] == "mul":
-            res = my_calc.mul(body["operands"])
-            my_json = my_calc.printjson('mul', body["operands"], res)
-
-        if body["command"] == "div":
-            res = my_calc.div(body["operands"])
-            my_json = my_calc.printjson('div', body["operands"], res)
-
-        return my_json
-
-
 if __name__ == '__main__':
     conf = {
 		'/': {
@@ -103,7 +112,7 @@ if __name__ == '__main__':
 		}
 	}
 
-    cherrypy.tree.mount (Operation(), '/operation', conf)
+    cherrypy.tree.mount (WebServer(), '/operation', conf)
     cherrypy.config.update({'server.socket_host': '0.0.0.0'})
     cherrypy.config.update({'server.socket_port': 8080})
     cherrypy.engine.start()

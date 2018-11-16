@@ -34,38 +34,74 @@ class Calculator():
             'result':result}
         return json.dumps(dict)
 
-
-class Add(Calculator):
+class WebServer():
     exposed = True
-    def GET (self, *uri, **params):
-        ad = Calculator()
-        res = ad.add(float(params['op1']), float(params['op2']))
-        json = ad.printjson('add', params['op1'], params['op2'], res)
-        return json
 
-class Sub(Calculator):
-    exposed = True
-    def GET (self, *uri, **params):
-        ad = Calculator()
-        res = ad.sub(float(params['op1']), float(params['op2']))
-        json = ad.printjson('sub', params['op1'], params['op2'], res)
-        return json
+    def GET(self, *uri, **params):
+        try:
+            if uri[0] == 'add':
+                calc = Calculator()
+                res = calc.div(float(params['op1']), float(params['op2']))
+                return calc.printjson('add', params['op1'], params['op2'], res)
 
-class Mul(Calculator):
-    exposed = True
-    def GET (self, *uri, **params):
-        ad = Calculator()
-        res = ad.mul(float(params['op1']), float(params['op2']))
-        json = ad.printjson('mul', params['op1'], params['op2'], res)
-        return json
+            elif uri[0] == 'sub':
+                calc = Calculator()
+                res = calc.div(float(params['op1']), float(params['op2']))
+                return calc.printjson('add', params['op1'], params['op2'], res)
 
-class Div(Calculator):
-    exposed = True
-    def GET (self, *uri, **params):
-        ad = Calculator()
-        res = ad.div(float(params['op1']), float(params['op2']))
-        json = ad.printjson('div', params['op1'], params['op2'], res)
-        return json
+            elif uri[0] == 'mul':
+                calc = Calculator()
+                res = calc.div(float(params['op1']), float(params['op2']))
+                return calc.printjson('add', params['op1'], params['op2'], res)
+
+            elif uri[0] == 'div':
+                calc = Calculator()
+                res = calc.div(float(params['op1']), float(params['op2']))
+                return calc.printjson('add', params['op1'], params['op2'], res)
+
+        except:
+            raise cherrypy.HTTPError(404, "Error, uri[0] must be an operator")
+
+    def POST(self):
+        pass
+
+    def PUT(self):
+        pass
+
+    def DELETE(self):
+        pass
+
+# class Add(Calculator):
+#     exposed = True
+#     def GET (self, *uri, **params):
+#         ad = Calculator()
+#         res = ad.add(float(params['op1']), float(params['op2']))
+#         json = ad.printjson('add', params['op1'], params['op2'], res)
+#         return json
+#
+# class Sub(Calculator):
+#     exposed = True
+#     def GET (self, *uri, **params):
+#         ad = Calculator()
+#         res = ad.sub(float(params['op1']), float(params['op2']))
+#         json = ad.printjson('sub', params['op1'], params['op2'], res)
+#         return json
+#
+# class Mul(Calculator):
+#     exposed = True
+#     def GET (self, *uri, **params):
+#         ad = Calculator()
+#         res = ad.mul(float(params['op1']), float(params['op2']))
+#         json = ad.printjson('mul', params['op1'], params['op2'], res)
+#         return json
+#
+# class Div(Calculator):
+#     exposed = True
+#     def GET (self, *uri, **params):
+#         ad = Calculator()
+#         res = ad.div(float(params['op1']), float(params['op2']))
+#         json = ad.printjson('div', params['op1'], params['op2'], res)
+#         return json
 
 if __name__ == '__main__':
 
@@ -76,10 +112,7 @@ if __name__ == '__main__':
         }
     }
 
-    cherrypy.tree.mount (Add(), '/add', conf)
-    cherrypy.tree.mount (Sub(), '/sub', conf)
-    cherrypy.tree.mount (Mul(), '/mul', conf)
-    cherrypy.tree.mount (Div(), '/div', conf)
+    cherrypy.tree.mount (WebServer(), '/', conf)
     cherrypy.config.update({'server.socket_host': '0.0.0.0'})
     cherrypy.config.update({'server.socket_port': 8080})
     cherrypy.engine.start()

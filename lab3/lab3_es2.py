@@ -9,26 +9,23 @@ import requests
 
 OP = ' - add\n - sub\n - mul\n - div'
 INP = '\n > '
+OPTIONS = ['search', 'insert', 'print_all', 'exit', 'quit', 'delete']
 
-class Application(object):
 
-    def __init__(self, filename):
-        self.filename = filename
+class Application():
 
-        with open(self.filename, 'r') as infile:
-            self.data = json.load(infile)
-
-        self.options = ['search', 'insert', 'print_all',
-                        'exit', 'quit', 'delete']
+    def __init__(self):
+        print('\n--- Welcome to your discography ---')
 
     def run(self):
 
         while True:
-            inp = input('\nWhat do you want to do?\n - search\n'
-            ' - insert\n - print_all\n - delete\n - exit\n-> ')
+            inp = input('\nWhat do you want to do?\n - search < >\n'
+            ' - insert <artist> <title> <year> <n.tracks>\n'
+            ' - print_all\n - delete <title>\n - exit\n-> ')
             inp = inp.split()
 
-            if inp[0] not in self.options:
+            if inp[0] not in OPTIONS:
                 print("Invalid command")
 
             if inp[0] == 'exit' or inp == 'quit':
@@ -71,7 +68,16 @@ class Application(object):
                             break
 
             if inp[0] == 'search':
-                r = requests.get('http://0.0.0.0:8080/search?by='+inp[1])
+                par = inp[1]
+
+                try:
+                    for k in range(2,len(inp)):
+                        par = par+' '+inp[k]
+                except:
+                    pass
+
+                r = requests.get('http://0.0.0.0:8080/search?by='+par)
+                print('\nResults for "%s"\n' % par)
                 print(json.dumps(r.json(), indent=4))
 
             if inp[0] == 'delete':
@@ -81,5 +87,5 @@ class Application(object):
 
 
 if __name__ == '__main__':
-    app = Application('discography.json')
+    app = Application()
     app.run()

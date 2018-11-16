@@ -23,8 +23,9 @@ class Discography():
     def run(self):
 
         while True:
-            inp = input('\nWhat do you want to do?\n - search\n'
-            ' - insert\n - print_all\n - exit\n-> ')
+            inp = input('\nWhat do you want to do?\n - search < >\n'
+            ' - insert <artist> <title> <year> <n.tracks>\n'
+            ' - print_all\n - exit\n-> ')
             inp = inp.split()
 
             if inp[0] not in self.options:
@@ -59,10 +60,14 @@ class Discography():
 
 
             if inp[0] == 'search':
-                #print(inp[1])
-                #if isinstance(inp[1], int):
-                #   print(int)
-                self.search(inp[1])
+                par = inp[1]
+                try:
+                    for k in range(2,len(inp)):
+                        par = par+' '+inp[k]
+                except:
+                    pass
+
+                self.search(par)
 
     def search(self, arg):
         self.arg = arg

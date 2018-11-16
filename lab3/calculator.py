@@ -5,9 +5,39 @@
 import json
 import cherrypy
 
-class Calculator(object):
+class CalculatorWS(object):  # RESTful web server
+    exposed = True
 
-    def __init__(self, op1=None, op2=None):
+    def GET(self, *uri, **params):
+        calc = Calculator(float(params['op1']), float(params['op2']))
+
+        if uri[0] == 'add':
+            res = calc.add()
+
+        if uri[0] == 'sub':
+            res = calc.sub()
+
+        if uri[0] == 'mul':
+            res = calc.mul()
+
+        if uri[0] == 'div':
+            res = calc.div()
+
+        return calc.printjson('add', res)  # Print results
+
+    def POST(self):
+        pass
+
+    def PUT(self):
+        pass
+
+    def DELETE(self):
+        pass
+
+
+class Calculator(object):  # Calculator
+
+    def __init__(self, op1, op2):
         self.op1 = op1
         self.op2 = op2
 
@@ -35,46 +65,6 @@ class Calculator(object):
         return json.dumps(dict)
 
 
-class Add(Calculator):
-    exposed = True
-
-    def GET (self, *uri, **params):
-        ad = Calculator(float(params['op1']), float(params['op2']))
-        res = ad.add()
-        json = ad.printjson('add', res)
-        return json
-
-
-class Sub(Calculator):
-    exposed = True
-
-    def GET (self, *uri, **params):
-        ad = Calculator(float(params['op1']), float(params['op2']))
-        res = ad.sub()
-        json = ad.printjson('sub', res)
-        return json
-
-
-class Mul(Calculator):
-    exposed = True
-
-    def GET (self, *uri, **params):
-        ad = Calculator(float(params['op1']), float(params['op2']))
-        res = ad.mul()
-        json = ad.printjson('mul', res)
-        return json
-
-
-class Div(Calculator):
-    exposed = True
-
-    def GET (self, *uri, **params):
-        ad = Calculator(float(params['op1']), float(params['op2']))
-        res = ad.div()
-        json = ad.printjson('div', res)
-        return json
-
-
 if __name__ == '__main__':
     conf = {
         '/': {
@@ -82,10 +72,7 @@ if __name__ == '__main__':
         'tools.sessions.on': True,
         }
     }
-    cherrypy.tree.mount (Add(), '/add', conf)
-    cherrypy.tree.mount (Sub(), '/sub', conf)
-    cherrypy.tree.mount (Mul(), '/mul', conf)
-    cherrypy.tree.mount (Div(), '/div', conf)
+    cherrypy.tree.mount (CalculatorWS(), '/', conf)
     cherrypy.config.update({'server.socket_host': '0.0.0.0'})
     cherrypy.config.update({'server.socket_port': 8080})
     cherrypy.engine.start()

@@ -13,6 +13,42 @@ import string
 import cherrypy
 
 
+class WebServer():
+    exposed = True
+
+    def GET(self, *uri, **params):
+        try:
+            if uri[0] == 'add':
+                calc = Calculator()
+                res = calc.add(float(uri[1]), float(uri[2]))
+
+            elif uri[0] == 'sub':
+                calc = Calculator()
+                res = calc.sub(float(uri[1]), float(uri[2]))
+
+            elif uri[0] == 'mul':
+                calc = Calculator()
+                res = calc.mul(float(uri[1]), float(uri[2]))
+
+            elif uri[0] == 'div':
+                calc = Calculator()
+                res = calc.div(float(uri[1]), float(uri[2]))
+
+            return calc.printjson(uri[0], uri[1], uri[2], res)
+
+        except:
+            raise cherrypy.HTTPError(404, "Error, uri[0] must be an operator")
+
+    def POST(self):
+        pass
+
+    def PUT(self):
+        pass
+
+    def DELETE(self):
+        pass
+
+
 class Calculator():
 
     def __init__(self):
@@ -40,38 +76,6 @@ class Calculator():
         return json.dumps(dict)
 
 
-class Add(Calculator):
-    exposed = True
-    def GET (self, *uri, **params):
-        ad = Calculator()
-        res = ad.add(float(uri[0]), float(uri[1]))
-        my_json = ad.printjson('add', uri[0], uri[1], res)
-        return my_json
-
-class Sub(Calculator):
-    exposed = True
-    def GET (self, *uri, **params):
-        ad = Calculator()
-        res = ad.sub(float(uri[0]), float(uri[1]))
-        my_json = ad.printjson('sub', uri[0], uri[1], res)
-        return my_json
-
-class Mul(Calculator):
-    exposed = True
-    def GET (self, *uri, **params):
-        ad = Calculator()
-        res = ad.mul(float(uri[0]), float(uri[1]))
-        my_json = ad.printjson('mul', uri[0], uri[1], res)
-        return my_json
-
-class Div(Calculator):
-    exposed = True
-    def GET (self, *uri, **params):
-        ad = Calculator()
-        res = ad.div(float(uri[0]), float(uri[1]))
-        my_json = ad.printjson('div', uri[0], uri[1], res)
-        return my_json
-
 if __name__ == '__main__':
 
     conf = {
@@ -81,10 +85,7 @@ if __name__ == '__main__':
         }
     }
 
-    cherrypy.tree.mount (Add(), '/add', conf)
-    cherrypy.tree.mount (Sub(), '/sub', conf)
-    cherrypy.tree.mount (Mul(), '/mul', conf)
-    cherrypy.tree.mount (Div(), '/div', conf)
+    cherrypy.tree.mount (WebServer(), '/', conf)
     cherrypy.config.update({'server.socket_host': '0.0.0.0'})
     cherrypy.config.update({'server.socket_port': 8080})
     cherrypy.engine.start()

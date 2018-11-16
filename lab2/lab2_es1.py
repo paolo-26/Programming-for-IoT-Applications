@@ -11,6 +11,43 @@ import json
 import cherrypy
 
 
+class WebServer():
+    exposed = True
+
+    def GET(self, *uri, **params):
+        try:
+            if uri[0] == 'add':
+                calc = Calculator()
+                res = calc.add(float(params['op1']), float(params['op2']))
+
+
+            elif uri[0] == 'sub':
+                calc = Calculator()
+                res = calc.sub(float(params['op1']), float(params['op2']))
+
+            elif uri[0] == 'mul':
+                calc = Calculator()
+                res = calc.mul(float(params['op1']), float(params['op2']))
+
+            elif uri[0] == 'div':
+                calc = Calculator()
+                res = calc.div(float(params['op1']), float(params['op2']))
+
+            return calc.printjson(uri[0], params['op1'], params['op2'], res)
+
+        except:
+            raise cherrypy.HTTPError(404, "Error, uri[0] must be an operator")
+
+    def POST(self):
+        pass
+
+    def PUT(self):
+        pass
+
+    def DELETE(self):
+        pass
+
+
 class Calculator():
 
     def add(self, op1, op2):
@@ -34,74 +71,6 @@ class Calculator():
             'result':result}
         return json.dumps(dict)
 
-class WebServer():
-    exposed = True
-
-    def GET(self, *uri, **params):
-        try:
-            if uri[0] == 'add':
-                calc = Calculator()
-                res = calc.div(float(params['op1']), float(params['op2']))
-                return calc.printjson('add', params['op1'], params['op2'], res)
-
-            elif uri[0] == 'sub':
-                calc = Calculator()
-                res = calc.div(float(params['op1']), float(params['op2']))
-                return calc.printjson('add', params['op1'], params['op2'], res)
-
-            elif uri[0] == 'mul':
-                calc = Calculator()
-                res = calc.div(float(params['op1']), float(params['op2']))
-                return calc.printjson('add', params['op1'], params['op2'], res)
-
-            elif uri[0] == 'div':
-                calc = Calculator()
-                res = calc.div(float(params['op1']), float(params['op2']))
-                return calc.printjson('add', params['op1'], params['op2'], res)
-
-        except:
-            raise cherrypy.HTTPError(404, "Error, uri[0] must be an operator")
-
-    def POST(self):
-        pass
-
-    def PUT(self):
-        pass
-
-    def DELETE(self):
-        pass
-
-# class Add(Calculator):
-#     exposed = True
-#     def GET (self, *uri, **params):
-#         ad = Calculator()
-#         res = ad.add(float(params['op1']), float(params['op2']))
-#         json = ad.printjson('add', params['op1'], params['op2'], res)
-#         return json
-#
-# class Sub(Calculator):
-#     exposed = True
-#     def GET (self, *uri, **params):
-#         ad = Calculator()
-#         res = ad.sub(float(params['op1']), float(params['op2']))
-#         json = ad.printjson('sub', params['op1'], params['op2'], res)
-#         return json
-#
-# class Mul(Calculator):
-#     exposed = True
-#     def GET (self, *uri, **params):
-#         ad = Calculator()
-#         res = ad.mul(float(params['op1']), float(params['op2']))
-#         json = ad.printjson('mul', params['op1'], params['op2'], res)
-#         return json
-#
-# class Div(Calculator):
-#     exposed = True
-#     def GET (self, *uri, **params):
-#         ad = Calculator()
-#         res = ad.div(float(params['op1']), float(params['op2']))
-#         json = ad.printjson('div', params['op1'], params['op2'], res)
-#         return json
 
 if __name__ == '__main__':
 

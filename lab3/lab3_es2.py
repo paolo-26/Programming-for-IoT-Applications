@@ -32,10 +32,6 @@ class Application(object):
                 print("Invalid command")
 
             if inp[0] == 'exit' or inp == 'quit':
-
-                #if self.changed:
-                #    self.saveData()
-
                 print("Quitting program...\a")
                 break
 

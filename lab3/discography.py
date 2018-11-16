@@ -103,10 +103,8 @@ class Discography(object):
         return json.dumps(self.data)
 
     def save_data(self):
-        print("Saving data to file...")
         with open(self.filename, 'w') as outfile:
             json.dump(self.data, outfile, ensure_ascii=False)
-        print("Complete\a")
 
     def check_disk(self, disk):
         self.disk = disk
@@ -136,7 +134,7 @@ class Discography(object):
             self.update_time()
 
         except:
-            print("Invalid format for year or number of tracks")
+            pass
 
     def insert_data(self, artist, title, year, tracks):
 

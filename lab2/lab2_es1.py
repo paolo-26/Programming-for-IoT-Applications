@@ -16,21 +16,17 @@ class WebServer():
 
     def GET(self, *uri, **params):
         try:
+            calc = Calculator()
             if uri[0] == 'add':
-                calc = Calculator()
                 res = calc.add(float(params['op1']), float(params['op2']))
 
-
             elif uri[0] == 'sub':
-                calc = Calculator()
                 res = calc.sub(float(params['op1']), float(params['op2']))
 
             elif uri[0] == 'mul':
-                calc = Calculator()
                 res = calc.mul(float(params['op1']), float(params['op2']))
 
             elif uri[0] == 'div':
-                calc = Calculator()
                 res = calc.div(float(params['op1']), float(params['op2']))
 
             return calc.printjson(uri[0], params['op1'], params['op2'], res)

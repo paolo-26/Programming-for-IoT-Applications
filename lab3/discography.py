@@ -75,9 +75,7 @@ class Discography(object):
         for d in self.data['album_list']:
 
             if (d['artist'] == self.arg or d['title'] == self.arg):
-                #print(self.data['album_list'][k])
                 search_results['albums'].append(self.data['album_list'][k])
-                #return json.dumps(self.data['album_list'][k])
 
             k += 1
 
@@ -89,9 +87,7 @@ class Discography(object):
 
                 if (d['publication_year'] == self.arg or
                     d['total_tracks'] == self.arg):
-                    #print(self.data['album_list'][k])
                     search_results['albums'].append(self.data['album_list'][k])
-                    #return json.dumps(self.data['album_list'][k])
 
                 k += 1
 
@@ -144,7 +140,6 @@ class Discography(object):
         try:
             self.publication_year = int(year)
             self.total_tracks = int(tracks)
-            print("Adding data...")
             self.data['album_list'].append({"artist": self.artist,
                 "title": self.title, "publication_year": self.publication_year,
                 "total_tracks": self.total_tracks})
@@ -152,7 +147,7 @@ class Discography(object):
             self.update_time()
 
         except:
-            print("Invalid format for year or number of tracks")
+            pass
 
     def update_time(self):
         self.data.update({"last_update":

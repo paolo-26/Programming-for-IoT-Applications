@@ -7,7 +7,7 @@ import datetime
 import cherrypy
 
 
-class ManageDiscography(object):  # RESTful web server
+class WebServer():  # RESTful web server
     exposed = True
 
     def GET(self, *uri, **params):
@@ -51,9 +51,11 @@ class ManageDiscography(object):  # RESTful web server
 
     def DELETE(self, *uri, **params):
         disco = Discography()
-        disco.check_disk(params['title'])  # Find disk index
-        disco.delete_data()
-        disco.save_data()
+        if (disco.check_disk(params['title'])):  # Find disk index
+            raise cherrypy.HTTPError('Album not present in the database')
+        else:
+            disco.delete_data()
+            disco.save_data()
 
 
 class Discography(object):
@@ -167,7 +169,7 @@ if __name__ == '__main__':
         }
     }
 
-    cherrypy.tree.mount(ManageDiscography(), '/', conf)
+    cherrypy.tree.mount(WebServer(), '/', conf)
     cherrypy.config.update({'server.socket_host': '0.0.0.0'})
     cherrypy.config.update({'server.socket_port': 8080})
     cherrypy.engine.start()

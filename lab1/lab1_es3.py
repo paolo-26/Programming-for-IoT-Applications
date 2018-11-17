@@ -48,7 +48,7 @@ class Discography():
                 else:
 
                     while True:
-                        up=input("Do you want to update data about %s? "
+                        up = input("Do you want to update data about %s? "
                         "(y/n)\n-> " % inp[2])
 
                         if up == 'y' or up == 'Y':
@@ -76,7 +76,6 @@ class Discography():
         for d in self.data['album_list']:
 
             if (d['artist'] == self.arg or d['title'] == self.arg):
-                #print(self.data['album_list'][k])
                 print(json.dumps(self.data['album_list'][k], indent=4))
 
             k += 1
@@ -89,7 +88,6 @@ class Discography():
 
                 if (d['publication_year'] == self.arg or
                     d['total_tracks'] == self.arg):
-                    #print(self.data['album_list'][k])
                     print(json.dumps(self.data['album_list'][k], indent=4))
 
                 k += 1
@@ -111,7 +109,6 @@ class Discography():
 
     def checkDisk(self, disk):
         self.disk = disk
-        #if any(d['title']==self.disk for d in self.data['album_list']):
         k = 0
 
         for d in self.data['album_list']:

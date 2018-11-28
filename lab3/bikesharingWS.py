@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 """
 @author = Paolo Grasso
+Examples:
+    http://0.0.0.0:8080/slots
+    http://0.0.0.0:8080/bikes
+    http://0.0.0.0:8080/zip?zip-code=08010
+    http://0.0.0.0:8080/electric
+    http://0.0.0.0:8080/count?district=2
+
 """
 
 import json

@@ -34,8 +34,6 @@ class MyPublisher(object):
         loop_flag = 0
 
 
-
-
 if __name__ == "__main__":
     pub = MyPublisher("Pub1", BROKER_IP)
     loop_flag = 1

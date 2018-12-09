@@ -26,16 +26,22 @@ class Application(object):
                 print('Quitting program...\a')
                 break
 
-            elif ((operand == 'add') or (operand == 'sub')
-                or (operand == 'mul') or (operand == 'div')):
-                op1 = inp[1]
-                op2 = inp[2]
-                res_json = requests.get('http://0.0.0.0:8080/'+operand+
-                '?op1='+op1+'&op2='+op2).json()
-                self.print_results(res_json)
-
             else:
-                print('Command not found')
+                try:
+                    op1 = inp[1]
+                    op2 = inp[2]
+                    res = requests.get('http://0.0.0.0:8080/'+operand+
+                                       '?op1='+op1+'&op2='+op2)
+                    try:
+                        res_json = res.json()
+                        self.print_results(res_json)
+
+                    except:
+                        print("HTTP error: - Status code: %d" % res.status_code)
+
+                except:
+                    print("You must insert two operands")
+
 
     def print_results(self,res_json):
         operator = res_json['operator']

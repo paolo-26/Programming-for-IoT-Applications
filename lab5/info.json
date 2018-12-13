@@ -1,0 +1,28 @@
+{
+  "devices": [{
+  "id": "01",
+  "end-points": "test",
+  "res": ["humidity", "temperature"],
+  "timestamp": "1970"
+  },{
+  "id": "02",
+  "end-points": "test2",
+  "res": ["humidity", "air quality"],
+  "timestamp": "1971"
+  }],
+  "users": [{
+    "id": "001",
+    "name": "Matteo",
+    "surname": "Zhang",
+    "email": "matteo@zhang.com"
+  },{
+    "id": "002",
+    "name": "Marzia",
+    "surname": "Health",
+    "email": "marzia@health.com"
+  }],
+  "broker": {
+    "ip": "0.0.0.0",
+    "port": 8080
+    }
+}

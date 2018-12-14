@@ -10,6 +10,8 @@ import json
 import cherrypy
 import time
 import datetime
+import requests
+from threading import Thread
 
 FILENAME = "info.json"
 
@@ -77,7 +79,7 @@ class MyCatalog(object):
                 if uri[1] == 'user':
                     with open(self.filename, "r") as f:
                         data = json.loads(f.read())
-                        
+
                     try:
                         dict = json.loads(cherrypy.request.body.read())
                     except:
@@ -100,9 +102,6 @@ class MyCatalog(object):
 
                     with open(self.filename, "w") as f:
                         json.dump(data, f, ensure_ascii=False)
-
-
-
 
 
                 elif uri[1] == 'device':
@@ -151,18 +150,44 @@ class MyCatalog(object):
         return "OK"
 
     def DELETE(self):
-        pass
+        if uri[0] == 'del':
+            with open(self.filename, "r") as f:
+                data = json.loads(f.read())
+            old = [d for d in data['devices'] if time.time()-float(d['timestamp']) > 120]
+            print(old)
 
+class OtherThread(Thread):
+    def __init__(self, ThreadID):
+        Thread.__init__(self)
+        self.ThreadID = ThreadID
+
+    def run(self):
+        while True:
+            print("Ciao")
+            r = requests.delete('http://0.0.0.0:8080/del')
+            time.sleep(10)
+
+class MainThread(Thread):
+    def __init__(self, ThreadID):
+        Thread.__init__(self)
+        self.ThreadID = ThreadID
+
+    def run(self):
+        conf = {
+            '/': {
+            'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
+            'tools.sessions.on': True,
+            }
+        }
+        cherrypy.tree.mount (MyCatalog(FILENAME), '/', conf)
+        cherrypy.config.update({'server.socket_host': '0.0.0.0'})
+        cherrypy.config.update({'server.socket_port': 8080})
+        cherrypy.engine.start()
+        cherrypy.engine.block()
 
 if __name__ == '__main__':
-    conf = {
-        '/': {
-        'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
-        'tools.sessions.on': True,
-        }
-    }
-    cherrypy.tree.mount (MyCatalog(FILENAME), '/', conf)
-    cherrypy.config.update({'server.socket_host': '0.0.0.0'})
-    cherrypy.config.update({'server.socket_port': 8080})
-    cherrypy.engine.start()
-    cherrypy.engine.block()
+    main_thread = MainThread(1)
+    other_thread = OtherThread(2)
+    main_thread.start()
+    time.sleep(5)
+    other_thread.start()

@@ -17,52 +17,108 @@ FILENAME = "info.json"
 
 
 class MyCatalog(object):
+    def __init__(self, filename):
+        self.filename = filename
+
+    def load_file(self):
+        with open(self.filename, "r") as f:
+            self.data = json.loads(f.read())
+
+    def save_file(self):
+        with open(self.filename, "w") as f:
+            json.dump(self.data, f, ensure_ascii=False)
+
+    def get_broker(self):
+        self.load_file()
+        res = self.data["broker"]
+        return res
+
+    def get_device(self, id):
+        self.load_file()
+
+        if id == 'all':
+            res = self.data["devices"]
+        else:
+            res = [d for d in self.data["devices"] if d["id"] == id]
+            try:
+                res = res[0]
+            except:
+                pass
+        return res
+
+    def get_user(self, id):
+        self.load_file()
+
+        if id == 'all':
+            res = self.data["users"]
+        else:
+            res = [u for u in self.data["users"] if u["id"] == id]
+            try:
+                res = res[0]
+            except:
+                pass
+        return res
+
+    def insert(self, ud, dict):
+        self.load_file()
+        if ud == 'user':
+            b = self.check_id('user', dict['id'])
+            if b:
+                self.data["users"].append(dict)
+
+
+        if ud == 'device':
+            b = self.check_id('device', dict['id'])
+            if b:
+                self.data["devices"].append(dict)
+
+        self.save_file()
+        return b
+
+    def check_id(self, ud, id):
+        b = 1
+        if ud == 'user':
+            ids = [u['id'] for u in self.data['users']]
+            if id in ids:
+                b = 0
+
+        if ud == 'device':
+            ids = [d['id'] for d in self.data['devices']]
+            if id in ids:
+                b = 0
+        return b
+
+class WebServer(object):
     exposed = True
 
     def __init__(self, filename):
-        self.filename = filename
+        self.calc = MyCatalog(filename)
 
     @cherrypy.tools.json_out()
     def GET(self, *uri, **params):
 
-        with open(self.filename, "r") as f:
-            data = json.loads(f.read())
+        # with open(self.filename, "r") as f:
+        #     data = json.loads(f.read())
 
         if len(uri) > 1:
             raise cherrypy.HTTPError(404, "Resource not found")
 
         json_in = json.loads(params['json'])
+
         if json_in['par'] == 'broker':
-            info = data["broker"]
+            info = self.calc.get_broker()
 
         if json_in['par'] == 'devices':
             id = json_in['id']
-
-            if id == 'all':
-                info = data["devices"]
-
-            else:
-                info = [d for d in data["devices"] if d["id"] == id]
-
-                try:
-                    info = info[0]
-                except:
-                    raise cherrypy.HTTPError(404, "Device not found")
+            info = self.calc.get_device(id)
+            if len(info) == 0:
+                raise cherrypy.HTTPError(404, "Device not found")
 
         if json_in['par'] == 'users':
             id = json_in['id']
-
-            if  id == 'all':
-                info = data["users"]
-
-            else:
-                info = [d for d in data["users"] if d["id"] == id]
-
-                try:
-                    info = info[0]
-                except:
-                    raise cherrypy.HTTPError(404, "User not found")
-
+            info = self.calc.get_user(id)
+            if len(info) == 0:
+                raise cherrypy.HTTPError(404, "User not found")
         try:
             return info
         except:
@@ -75,72 +131,112 @@ class MyCatalog(object):
 
         try:
             if uri[0] == 'add':
-
-                if uri[1] == 'user':
-                    with open(self.filename, "r") as f:
-                        data = json.loads(f.read())
-
+                try:
+                    dict = json.loads(cherrypy.request.body.read())
+                    par = dict['par']
+                except:
+                    raise SyntaxError
+                if par == 'user':
                     try:
-                        dict = json.loads(cherrypy.request.body.read())
-                    except:
-                        raise SyntaxError
-
-                    try:
+                        del dict['par']
                         id = dict['id']
                         name = dict['name']
                         surname = dict['surname']
                         email = dict['email']
-
                     except:
                         raise SyntaxError
 
-                    check = [d['id'] for d in data['users']]
-                    if id in check:
+                    b = self.calc.insert('user',dict)
+                    if b == 0:
+                        print ("exist")
                         raise FileExistsError
 
-                    data["users"].append(dict)
-
-                    with open(self.filename, "w") as f:
-                        json.dump(data, f, ensure_ascii=False)
-
-
-                elif uri[1] == 'device':
-                    with open(self.filename, "r") as f:
-                        data = json.loads(f.read())
+                elif par == 'device':
                     try:
-                        dict = json.loads(cherrypy.request.body.read())
-                    except:
-                        raise SyntaxError
-
-                    try:
+                        del dict['par']
                         id = dict['id']
                         endpoints = dict['end-points']
                         res = dict['res']
                         timestamp = {"timestamp": str(time.time())}
-
+                        dict.update(timestamp)
                     except:
                         raise SyntaxError
-
-                    check = [d['id'] for d in data['devices']]
-
-                    if id in check:
+                    b = self.calc.insert('device',dict)
+                    if b == 0:
                         raise FileExistsError
-
-                    dict.update(timestamp)
-                    data["devices"].append(dict)
-
-                    with open(self.filename, "w") as f:
-                        json.dump(data, f, ensure_ascii=False)
-
                 else:
                     raise SyntaxError
+
+
+
+
+
+
+                # if uri[1] == 'user':
+                #     with open(self.filename, "r") as f:
+                #         data = json.loads(f.read())
+                #
+                #     try:
+                #         dict = json.loads(cherrypy.request.body.read())
+                #     except:
+                #         raise SyntaxError
+                #
+                #     try:
+                #         id = dict['id']
+                #         name = dict['name']
+                #         surname = dict['surname']
+                #         email = dict['email']
+                #
+                #     except:
+                #         raise SyntaxError
+                #
+                #     check = [d['id'] for d in data['users']]
+                #     if id in check:
+                #         raise FileExistsError
+                #
+                #     data["users"].append(dict)
+                #
+                #     with open(self.filename, "w") as f:
+                #         json.dump(data, f, ensure_ascii=False)
+                #
+                #
+                # elif uri[1] == 'device':
+                #     with open(self.filename, "r") as f:
+                #         data = json.loads(f.read())
+                #     try:
+                #         dict = json.loads(cherrypy.request.body.read())
+                #     except:
+                #         raise SyntaxError
+                #
+                #     try:
+                #         id = dict['id']
+                #         endpoints = dict['end-points']
+                #         res = dict['res']
+                #         timestamp = {"timestamp": str(time.time())}
+                #
+                #     except:
+                #         raise SyntaxError
+                #
+                #     check = [d['id'] for d in data['devices']]
+                #
+                #     if id in check:
+                #         raise FileExistsError
+                #
+                #     dict.update(timestamp)
+                #     data["devices"].append(dict)
+                #
+                #     with open(self.filename, "w") as f:
+                #         json.dump(data, f, ensure_ascii=False)
+
+                # else:
+                #     raise SyntaxError
 
             else:
                 raise SyntaxError
 
         except FileExistsError:
             print("ex1")
-            raise cherrypy.HTTPError(400, "userID already present")
+            raise cherrypy.HTTPError(400, "ID already present")
 
         except SyntaxError:
             print("ex2")
@@ -179,7 +275,7 @@ class MainThread(Thread):
             'tools.sessions.on': True,
             }
         }
-        cherrypy.tree.mount (MyCatalog(FILENAME), '/', conf)
+        cherrypy.tree.mount (WebServer(FILENAME), '/', conf)
         cherrypy.config.update({'server.socket_host': '0.0.0.0'})
         cherrypy.config.update({'server.socket_port': 8080})
         cherrypy.engine.start()
@@ -190,4 +286,4 @@ if __name__ == '__main__':
     other_thread = OtherThread(2)
     main_thread.start()
     time.sleep(5)
-    other_thread.start()
+    #other_thread.start()

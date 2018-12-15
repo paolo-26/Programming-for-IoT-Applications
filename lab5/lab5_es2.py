@@ -23,7 +23,7 @@ class MyApplication(object):
             inp = input("> ")
 
             if inp == '1':
-                j = '?json={"par": "broker"}'
+                j = '?json={"type": "broker"}'
                 r = requests.get(URL+j)
 
                 try:
@@ -35,7 +35,7 @@ class MyApplication(object):
                     print("\nHTTP Error:", r.status_code, "\n")
 
             if inp == '2':
-                j = '?json={"par": "devices", "id": "all"}'
+                j = '?json={"type": "devices", "id": "all"}'
                 r = requests.get(URL+j)
 
                 try:
@@ -49,7 +49,7 @@ class MyApplication(object):
 
             if inp == '3':
                 id = input("Type the deviceID >")
-                dict = json.dumps({"par": "devices", "id": id})
+                dict = json.dumps({"type": "devices", "id": id})
                 j = '?json='+dict
                 r = requests.get(URL+j)
 
@@ -63,7 +63,7 @@ class MyApplication(object):
                     print("\nHTTP Error:", r.status_code, "\n")
 
             if inp == '4':
-                j = '?json={"par": "users", "id": "all"}'
+                j = '?json={"type": "users", "id": "all"}'
                 r = requests.get(URL+j)
                 res = json.loads(r.text)
 
@@ -77,7 +77,7 @@ class MyApplication(object):
 
             if inp == '5':
                 id = input("Type the userID >")
-                dict = json.dumps({"par": "users", "id": id})
+                dict = json.dumps({"type": "users", "id": id})
                 j = '?json='+dict
                 r = requests.get(URL+j)
 

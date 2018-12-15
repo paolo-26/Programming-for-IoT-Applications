@@ -25,25 +25,21 @@ class MyApplication(object):
             if inp == '1':
                 j = '?json={"type": "broker"}'
                 r = requests.get(URL+j)
-
                 try:
                     res = json.loads(r.text)
                     print('\nIP address:', res['ip'])
                     print('port: ', res['port'],'\n')
-
                 except:
                     print("\nHTTP Error:", r.status_code, "\n")
 
             if inp == '2':
                 j = '?json={"type": "devices", "id": "all"}'
                 r = requests.get(URL+j)
-
                 try:
                     res = json.loads(r.text)
                     print("")
                     print(json.dumps(res, indent=2))
                     print("")
-
                 except:
                     print("\nHTTP Error:", r.status_code, "\n")
 
@@ -52,13 +48,11 @@ class MyApplication(object):
                 dict = json.dumps({"type": "devices", "id": id})
                 j = '?json='+dict
                 r = requests.get(URL+j)
-
                 try:
                     res = json.loads(r.text)
                     print("")
                     print(json.dumps(res, indent=2))
                     print("")
-
                 except:
                     print("\nHTTP Error:", r.status_code, "\n")
 
@@ -66,12 +60,10 @@ class MyApplication(object):
                 j = '?json={"type": "users", "id": "all"}'
                 r = requests.get(URL+j)
                 res = json.loads(r.text)
-
                 try:
                     print("")
                     print(json.dumps(res, indent=2))
                     print("")
-
                 except:
                     print("\nHTTP Error:", r.status_code, "\n")
 
@@ -80,20 +72,13 @@ class MyApplication(object):
                 dict = json.dumps({"type": "users", "id": id})
                 j = '?json='+dict
                 r = requests.get(URL+j)
-
                 try:
                     res = json.loads(r.text)
                     print("")
                     print(json.dumps(res, indent=2))
                     print("")
-
                 except:
                     print("\nHTTP Error:", r.status_code, "\n")
-
-
-
-
-
 
 
 if __name__ == '__main__':

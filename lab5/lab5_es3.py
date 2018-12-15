@@ -9,7 +9,9 @@ import time
 
 URL = 'http://0.0.0.0:8080/'
 
+
 class MyDevice(object):
+
     def __init__(self):
         self.dict = {
         "type": "device",
@@ -19,14 +21,15 @@ class MyDevice(object):
         }
 
     def run(self):
-        # string = json.dumps(self.dict)
         while True:
             try:
                 r = requests.put(URL+'add', data=json.dumps(self.dict))
                 print("Status updated")
             except:
                 print("Server is unreachable")
+
             time.sleep(45)
+
 
 if __name__ == '__main__':
     device = MyDevice()

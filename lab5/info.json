@@ -3,12 +3,12 @@
   "id": "d01",
   "end-points": "topic1",
   "res": ["humidity", "temperature"],
-  "timestamp": "1544864720"
+  "timestamp": 1544864720
   },{
   "id": "d02",
   "end-points": "topic2",
   "res": ["humidity", "air quality"],
-  "timestamp": "1544864775"
+  "timestamp": 1544864775
   }],
   "users": [{
     "id": "u01",

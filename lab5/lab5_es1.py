@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 @author = Paolo Grasso
-http://0.0.0.0:8080/?json={%22par%22:%20%22users%22,%22id%22:%20%22001%22}
-http://0.0.0.0:8080/?json={%22par%22:%20%22users%22,%22id%22:%20%22all%22}
+http://0.0.0.0:8080/?json={%22type%22:%20%22users%22,%22id%22:%20%22001%22}
+http://0.0.0.0:8080/?json={%22type%22:%20%22users%22,%22id%22:%20%22all%22}
 
 """
 
@@ -85,23 +85,49 @@ class MyCatalog(object):
             if b:
                 self.data["devices"].append(dict)
 
+
         self.save_file()
         return b
+
+    # def update_timestamp(self, ud, id):
+    #     self.load_file()
+    #
+    #     if ud == 'user':
+    #
+    #         for u in self.data["users"]:
+    #
+    #             if u['id'] == id:
+    #                 u['timestamp'] = time.time()
+    #
+    #     if ud == 'device':
+    #
+    #         for d in self.data["devices"]:
+    #
+    #             if d['id'] == id:
+    #                 d['timestamp'] = time.time()
 
     def check_id(self, ud, id):
         b = 1
 
+        if ud == 'device':
+            try:
+                for d in self.data['devices']:
+                    if d['id'] == id:
+                        d['timestamp'] = time.time()
+                        b = 0
+            except:
+                pass
+
         if ud == 'user':
             ids = [u['id'] for u in self.data['users']]
-
             if id in ids:
                 b = 0
-
-        if ud == 'device':
-            ids = [d['id'] for d in self.data['devices']]
-
-            if id in ids:
-                b = 0
+        #
+        # if ud == 'device':
+        #     ids = [d['id'] for d in self.data['devices']]
+        #
+        #     if id in ids:
+        #         b = 0
 
         return b
 
@@ -109,34 +135,37 @@ class MyCatalog(object):
         self.load_file()
         old = [d['id'] for d in self.data['devices'] if time.time()-float(d['timestamp']) > 120]
         if len(old) > 0:
-            self.data['devices'] = [d in self.data['devices'] for d in self.data['devices'] if not d['id'] in old]
+            print("OOOOLD:", old)
+            self.data['devices'] = [d for d in self.data['devices'] if d['id'] not in old]
+            print(self.data)
             self.save_file()
 
 class WebServer(object):
     exposed = True
 
     def __init__(self, filename):
-        self.calc = MyCatalog(filename)
+        self.filename = filename
 
     @cherrypy.tools.json_out()
     def GET(self, *uri, **params):
+        self.calc = MyCatalog(self.filename)
 
         if len(uri) > 1:
             raise cherrypy.HTTPError(404, "Resource not found")
 
         json_in = json.loads(params['json'])
 
-        if json_in['par'] == 'broker':
+        if json_in['type'] == 'broker':
             info = self.calc.get_broker()
 
-        if json_in['par'] == 'devices':
+        if json_in['type'] == 'devices':
             id = json_in['id']
             info = self.calc.get_device(id)
 
             if len(info) == 0:
                 raise cherrypy.HTTPError(404, "Device not found")
 
-        if json_in['par'] == 'users':
+        if json_in['type'] == 'users':
             id = json_in['id']
             info = self.calc.get_user(id)
 
@@ -152,22 +181,22 @@ class WebServer(object):
         pass
 
     def PUT(self, *uri, **params):
-
+        self.calc = MyCatalog(self.filename)
         try:
 
             if uri[0] == 'add':
 
                 try:
                     dict = json.loads(cherrypy.request.body.read())
-                    par = dict['par']
+                    type = dict['type']
 
                 except:
                     raise SyntaxError
 
-                if par == 'user':
+                if type == 'user':
 
                     try:
-                        del dict['par']
+                        del dict['type']
                         id = dict['id']
                         name = dict['name']
                         surname = dict['surname']
@@ -182,14 +211,14 @@ class WebServer(object):
                         print ("exist")
                         raise FileExistsError
 
-                elif par == 'device':
+                elif type == 'device':
 
                     try:
-                        del dict['par']
+                        del dict['type']
                         id = dict['id']
                         endpoints = dict['end-points']
                         res = dict['res']
-                        timestamp = {"timestamp": str(time.time())}
+                        timestamp = {"timestamp": time.time()}
                         dict.update(timestamp)
 
                     except:
@@ -203,6 +232,9 @@ class WebServer(object):
                     raise SyntaxError
 
             #raise SyntaxError
+            elif uri[0] == 'update':
+                print("update")
+
 
             else:
                 raise SyntaxError
@@ -219,7 +251,7 @@ class WebServer(object):
         return "OK"
 
     def DELETE(self, *uri, **params):
-
+        self.calc = MyCatalog(self.filename)
         if uri[0] == 'del':
             self.calc.delete()
             print("deleted")
@@ -233,7 +265,7 @@ class OtherThread(Thread):
         while True:
             print("Ciao")
             r = requests.delete('http://0.0.0.0:8080/del')
-            time.sleep(60)
+            time.sleep(30)
 
 class MainThread(Thread):
     def __init__(self, ThreadID):
@@ -257,5 +289,5 @@ if __name__ == '__main__':
     main_thread = MainThread(1)
     other_thread = OtherThread(2)
     main_thread.start()
-    time.sleep(5)
+    time.sleep(15)
     other_thread.start()
